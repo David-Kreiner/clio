@@ -26,7 +26,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//go:embed agent.gpt context/*.gpt tools/*.gpt agents/*.gpt
+//go:embed agent.gpt context/* tools/*.gpt agents/*.gpt
 var embedFS embed.FS
 
 const (

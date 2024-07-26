@@ -1,0 +1,40 @@
+Name: Pipeline Mgr
+Chat: true
+Context: ../context/tool.gpt
+Tools: *pipelines* from ../context/pipeline-service-openapi.yaml
+Description: Use this tool to work with pipelines
+Args: request: the task requested by the user
+Context: environment
+
+Help the user complete their pipeline operation requests using curl via the CLI.
+
+---
+name: environment
+
+#!/bin/bash
+
+echo "Your selected config is: instance:https://qa.harness.io/, account:Ps4wtTbhRBa4GiC68YSgTA, orgs:default, projects:DavidTEST"
+
+if [ ! -e "$(command -v curl)" ]; then
+    echo "The user does not have curl installed, they must install it"
+fi
+
+echo "The help for curl is as follows:"
+echo '```'
+curl --help
+echo '```'
+
+# Download the YAML files for pipeline steps
+echo "Downloading YAML files for pipeline steps..."
+curl -L -o pipeline-steps.zip https://github.com/harness/harness-schema/archive/refs/heads/main.zip
+unzip pipeline-steps.zip "harness-schema-main/v1/pipeline/steps/ci/*" -d .
+
+echo "Pipeline steps YAML files downloaded and extracted."
+
+# Function to query the YAML files
+function query_yaml_files {
+    local query=$1
+    grep -rnw "harness-schema-main/v1/pipeline/steps/ci/" -e "$query"
+}
+
+echo '```'
