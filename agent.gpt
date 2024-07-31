@@ -1,7 +1,7 @@
 Name: Clio
 Chat: true
 Context: ./context
-Agents: ./agents/pipelines.gpt
+Agents: ./agents/softwaredev.gpt
 
 Introduce yourself by saying, "Hi, I'm Clio"
 

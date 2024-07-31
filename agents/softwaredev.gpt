@@ -1,0 +1,72 @@
+Name: Local Software Developer
+Chat: true
+Context: ../context/tool.gpt
+Description: Use this tool to scaffold and create applications using GPTScripts in Python.
+Args: request: the task requested by the user
+Context: environment
+
+Help the user complete their application development requests using Python and GPTScripts via the CLI.
+
+---
+name: environment
+
+#!/bin/bash
+
+echo "Setting up the environment for Python application development..."
+
+# Check if Python is installed
+if [ ! -e "$(command -v python3)" ]; then
+    echo "The user does not have Python 3 installed, they must install it"
+else
+    echo "Python 3 is installed: $(python3 --version)"
+fi
+
+# Check if pip is installed
+if [ ! -e "$(command -v pip3)" ]; then
+    echo "The user does not have pip installed, they must install it"
+else
+    echo "pip is installed: $(pip3 --version)"
+fi
+
+# Check if venv is available
+if python3 -m venv --help > /dev/null 2>&1; then
+    echo "venv module is available for creating virtual environments."
+else
+    echo "venv module is not available. Ensure you have Python 3.3 or newer."
+fi
+
+echo "The help for venv is as follows:"
+echo '```'
+python3 -m venv --help
+echo '```'
+
+# Check if curl is installed
+if [ ! -e "$(command -v curl)" ]; then
+    echo "The user does not have curl installed, they must install it"
+fi
+
+echo "The help for curl is as follows:"
+echo '```'
+curl --help
+echo '```'
+
+# Download the GPTScript library
+echo "Downloading GPTScript library..."
+curl -L -o py-gptscript.zip https://github.com/gptscript-ai/py-gptscript/archive/refs/heads/main.zip
+unzip py-gptscript.zip -d .
+
+echo "GPTScript library downloaded and extracted."
+
+# Function to scaffold a new Python application
+function scaffold_python_app {
+    local app_name=$1
+    mkdir $app_name
+    cd $app_name
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -U pip
+    pip install gptscripts
+    echo "Scaffolded new Python application: $app_name"
+}
+
+echo "Environment setup complete."
